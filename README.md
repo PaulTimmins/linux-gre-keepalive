@@ -6,10 +6,15 @@ Requires Net::Pcap, NetPacket::IP, and Proc::Daemon
 (all 3 have stable debian perl packages in the standard repositories)
 
 Usage:
+
 sysctl -w net.ipv4.ip_forward=1
+
 sysctl -w net.ipv6.conf.all.forwarding=1
+
 ip tunnel add mytunnel mode gre remote x.x.x.x local y.y.y.y ttl 255 pmtudisc
+
 ip link set mytunnel up
+
 ./gre-keepalive.pl mytunnel
 
 
