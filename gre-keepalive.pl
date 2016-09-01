@@ -37,6 +37,5 @@ sub process_packet {
     if (!send($socket, $packet, 0, pack_sockaddr_in(0, $dest_ip))) {
         die "Couldn't send packet: $!";
     }
-    print "Sent to $dest_ip\n";
 }
 
