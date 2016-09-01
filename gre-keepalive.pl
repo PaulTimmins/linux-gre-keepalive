@@ -6,7 +6,6 @@ use warnings;
 use Net::Pcap;
 use Proc::Daemon;
 use Socket;
-use constant DUMMY_ADDR  => scalar(sockaddr_in(0, inet_aton('1.0.0.0')));
 
 Proc::Daemon::Init;
 
@@ -35,7 +34,9 @@ sub process_packet {
     $packet = unpack("x16a*", $packet);
 
     my $dest_ip = unpack("x16a4", $packet);
-    send($socket, $packet, 0, DUMMY_ADDR) or die "Couldn't send packet: $!";
+    if (!send($socket, $packet, 0, pack_sockaddr_in(0, $dest_ip))) {
+        die "Couldn't send packet: $!";
+    }
     print "Sent to $dest_ip\n";
 }
 
