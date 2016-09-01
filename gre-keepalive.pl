@@ -4,7 +4,6 @@ use strict;
 use warnings;
 
 use Net::Pcap;
-use NetPacket::IP;
 use Proc::Daemon;
 use Socket;
 use constant DUMMY_ADDR  => scalar(sockaddr_in(0, inet_aton('1.0.0.0')));
@@ -35,8 +34,7 @@ sub process_packet {
     # Strip the "cooked capture" header.
     $packet = unpack("x16a*", $packet);
 
-    my $pkt = NetPacket::IP->decode($packet);
-    my $dest_ip = $pkt->{'dest_ip'};
+    my $dest_ip = unpack("x16a4", $packet);
     print "Sending $packet to $dest_ip\n";
     send($socket, $packet, 0, DUMMY_ADDR) or die "Couldn't send packet: $!";
     print "Sent to $dest_ip\n";
