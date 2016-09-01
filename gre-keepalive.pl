@@ -36,8 +36,9 @@ sub process_packet {
     $packet = unpack("x16a*", $packet);
 
     my $pkt = NetPacket::IP->decode($packet);
-    print "Sending $packet to $pkt->{'dest_ip'}\n";
+    my $dest_ip = $pkt->{'dest_ip'};
+    print "Sending $packet to $dest_ip\n";
     send($socket, $packet, 0, DUMMY_ADDR) or die "Couldn't send packet: $!";
-    print "Sent to $pkt->{'dest_ip'}\n";
+    print "Sent to $dest_ip\n";
 }
 
