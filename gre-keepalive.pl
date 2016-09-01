@@ -30,11 +30,11 @@ my $continue = 1;
 
     sub process_packet {
         my ($user_data, $header, $packet) = @_;
-	my $packet = unpack("x16a*",$packet);
+        my $packet = unpack("x16a*",$packet);
         my $pkt = NetPacket::IP->decode($packet);
-	print "Sending $packet to $pkt->{'dest_ip'}\n";
-	send(RAW,$packet,0,DUMMY_ADDR) or die "Couldn't send packet: $!";
+        print "Sending $packet to $pkt->{'dest_ip'}\n";
+        send(RAW,$packet,0,DUMMY_ADDR) or die "Couldn't send packet: $!";
         print "Sent to $pkt->{'dest_ip'}\n";
-	# do something ...
+        # do something ...
     }
 
