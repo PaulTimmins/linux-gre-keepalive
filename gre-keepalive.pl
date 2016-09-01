@@ -1,10 +1,9 @@
 #!/usr/bin/perl
 use Net::Pcap;
 use NetPacket::IP;
+use Proc::Daemon;
 use Socket;
 use constant DUMMY_ADDR  => scalar(sockaddr_in(0, inet_aton('1.0.0.0')));
-
-use Proc::Daemon;
 
 Proc::Daemon::Init;
 
