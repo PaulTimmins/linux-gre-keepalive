@@ -35,7 +35,6 @@ sub process_packet {
     $packet = unpack("x16a*", $packet);
 
     my $dest_ip = unpack("x16a4", $packet);
-    print "Sending $packet to $dest_ip\n";
     send($socket, $packet, 0, DUMMY_ADDR) or die "Couldn't send packet: $!";
     print "Sent to $dest_ip\n";
 }
