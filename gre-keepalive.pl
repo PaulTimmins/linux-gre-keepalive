@@ -11,8 +11,8 @@ use constant DUMMY_ADDR  => scalar(sockaddr_in(0, inet_aton('1.0.0.0')));
 
 Proc::Daemon::Init;
 
-socket(RAW, AF_INET, SOCK_RAW, 255) || die $!;
-setsockopt(RAW, 0, 1, 1);
+socket(my $socket, AF_INET, SOCK_RAW, 255) || die $!;
+setsockopt($socket, 0, 1, 1);
 
 my $dev = $ARGV[0];
 my $err;
@@ -25,19 +25,19 @@ if (Net::Pcap::compile($pcap, \$filter_t, $filter, 1, 0) == -1) {
 }
 Net::Pcap::setfilter($pcap, $filter_t);
 
-Net::Pcap::loop($pcap, -1, \&process_packet, undef);
+Net::Pcap::loop($pcap, -1, \&process_packet, $socket);
 
 Net::Pcap::close($pcap);
 
 sub process_packet {
-    my ($user_data, $header, $packet) = @_;
+    my ($socket, $header, $packet) = @_;
 
     # Strip the "cooked capture" header.
     $packet = unpack("x16a*", $packet);
 
     my $pkt = NetPacket::IP->decode($packet);
     print "Sending $packet to $pkt->{'dest_ip'}\n";
-    send(RAW, $packet, 0, DUMMY_ADDR) or die "Couldn't send packet: $!";
+    send($socket, $packet, 0, DUMMY_ADDR) or die "Couldn't send packet: $!";
     print "Sent to $pkt->{'dest_ip'}\n";
 }
 
