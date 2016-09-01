@@ -1,16 +1,12 @@
 #!/usr/bin/perl
 use Net::Pcap;
 use NetPacket::IP;
-use FileHandle;
 use Socket;
 use constant DUMMY_ADDR  => scalar(sockaddr_in(0, inet_aton('1.0.0.0')));
 
 use Proc::Daemon;
 
 Proc::Daemon::Init;
-
-my $continue = 1;
-#$SIG{TERM} = sub { $continue = 0 };
 
 socket(RAW, AF_INET, SOCK_RAW, 255) || die $!;
 setsockopt(RAW, 0, 1, 1);
@@ -23,7 +19,7 @@ if (Net::Pcap::compile($pcap, \$filter_t, $filter, $opt, $net) == -1) {
 }
 
 Net::Pcap::setfilter($pcap, $filter_t);
-Net::Pcap::loop($pcap, -1, \&process_packet, "just for the demo");
+Net::Pcap::loop($pcap, -1, \&process_packet, undef);
 
 Net::Pcap::close($pcap);
 
