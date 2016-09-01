@@ -20,7 +20,7 @@ my $pcap = Net::Pcap::open_live($dev, 1024, 0, 0, \$err);
 
 my $filter = "proto gre";
 my $filter_t;
-if (Net::Pcap::compile($pcap, \$filter_t, $filter, 0, 0) == -1) {
+if (Net::Pcap::compile($pcap, \$filter_t, $filter, 1, 0) == -1) {
     die "Unable to compile filter string '$filter'\n";
 }
 Net::Pcap::setfilter($pcap, $filter_t);
