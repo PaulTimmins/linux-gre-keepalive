@@ -31,7 +31,10 @@ Net::Pcap::close($pcap);
 
 sub process_packet {
     my ($user_data, $header, $packet) = @_;
+
+    # Strip the "cooked capture" header.
     $packet = unpack("x16a*", $packet);
+
     my $pkt = NetPacket::IP->decode($packet);
     print "Sending $packet to $pkt->{'dest_ip'}\n";
     send(RAW, $packet, 0, DUMMY_ADDR) or die "Couldn't send packet: $!";
