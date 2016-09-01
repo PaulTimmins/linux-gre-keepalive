@@ -9,15 +9,16 @@ Proc::Daemon::Init;
 
 socket(RAW, AF_INET, SOCK_RAW, 255) || die $!;
 setsockopt(RAW, 0, 1, 1);
-my $dev = $ARGV[0];
 
+my $dev = $ARGV[0];
 my $pcap = Net::Pcap::open_live($dev, 1024, 0, 0, \$err);
+
 $filter = "proto gre";
 if (Net::Pcap::compile($pcap, \$filter_t, $filter, $opt, $net) == -1) {
     die "Unable to compile filter string '$filter'\n";
 }
-
 Net::Pcap::setfilter($pcap, $filter_t);
+
 Net::Pcap::loop($pcap, -1, \&process_packet, undef);
 
 Net::Pcap::close($pcap);
